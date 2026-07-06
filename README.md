@@ -4,8 +4,9 @@ One repo for how autonomous agents **behave** and **find** things.
 
 | Pillar | Folder | Origin |
 |--------|--------|--------|
-| **How to behave** | `how_to_behave/` | [Submind](https://github.com/gowrishkar/submind) — completion contracts, anti–fake-done, subconscious habits |
+| **How to behave** | `how_to_behave/` | Submind — completion contracts, anti–fake-done, subconscious habits |
 | **What to find** | `what_to_find/search_as_code/` | Search as Code — YAML profiles, discover → validate → rank → JSON |
+| **DREAM (nightly)** | `Dream/` | Diary audit, reflect, `hermes update`, backup, Drive upload (scripts only) |
 
 Designed for **Hermes Agent** (and any Python agent loop).
 

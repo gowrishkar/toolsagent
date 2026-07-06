@@ -21,7 +21,7 @@ GITHUB_PRESENCE = Path.home() / ".hermes" / "scripts" / "daily-github-presence.p
 sys.path.insert(0, str(DREAM_DIR))
 from diary_audit import audit, log_day  # noqa: E402
 from replay_reflect import reflect_day  # noqa: E402
-from backup import create_backup, hermes_update  # noqa: E402
+from backup import create_backup, hermes_update, prune_local_backups  # noqa: E402
 from upload import upload_file  # noqa: E402
 
 
@@ -62,7 +62,12 @@ def main() -> int:
     report["phases"]["hermes_update"] = hermes_update(skip=args.dry_run)
 
     tar_path = create_backup(iso)
-    report["phases"]["backup"] = {"path": str(tar_path), "bytes": tar_path.stat().st_size}
+    removed = prune_local_backups(keep=2)
+    report["phases"]["backup"] = {
+        "path": str(tar_path),
+        "bytes": tar_path.stat().st_size,
+        "pruned": removed,
+    }
 
     if args.dry_run:
         report["phases"]["upload"] = {"skipped": True, "dry_run": True}

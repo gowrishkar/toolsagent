@@ -34,18 +34,34 @@ EXCLUDE_GLOBS = [
 
 
 def _filter(tarinfo: tarfile.TarInfo) -> tarfile.TarInfo | None:
-    name = tarinfo.name
+    name = tarinfo.name.replace("\\", "/")
     parts = Path(name).parts
     if any(p in EXCLUDE_NAMES for p in parts):
         return None
     if name.endswith("state.db") or name.endswith("sessions.db"):
         return None
-    for pat in EXCLUDE_GLOBS:
-        if Path(name).match(pat) or name.replace("\\", "/").find(pat.replace("*", "")) >= 0:
-            # simple glob: skip paths containing pattern base
-            if "sessions/" in name.replace("\\", "/") and "profiles/" in name:
-                return None
+    if "/dream/backups/" in name or name.endswith("/dream/backups"):
+        return None
+    if "/hermes-agent/.git/" in name:
+        return None
+    if "/sessions/" in name and "/profiles/" in name:
+        return None
+    for pat in ("audio_cache/", "image_cache/", "video_cache/", "__pycache__/"):
+        if pat in name:
+            return None
     return tarinfo
+
+
+def prune_local_backups(keep: int = 2) -> list[str]:
+    """Keep newest `keep` tarballs; delete older (Drive is canonical)."""
+    if not OUT_DIR.exists():
+        return []
+    files = sorted(OUT_DIR.glob("hermes-backup-*.tar.gz"), key=lambda p: p.stat().st_mtime, reverse=True)
+    removed = []
+    for p in files[keep:]:
+        p.unlink(missing_ok=True)
+        removed.append(p.name)
+    return removed
 
 
 def create_backup(stamp: str | None = None) -> Path:
