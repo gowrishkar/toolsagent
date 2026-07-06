@@ -62,7 +62,7 @@ def _run_reflect(trajectory: list[dict], failed: bool) -> None:
     cmd = [sys.executable, str(REFLECT), str(tmp)]
     if failed:
         cmd.append("--failed")
-    subprocess.run(cmd, check=False, cwd=str(REPO))
+    subprocess.run(cmd, check=False, cwd=str(REPO), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def reflect_day(iso_day: str) -> dict:
