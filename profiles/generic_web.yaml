@@ -1,0 +1,62 @@
+schema: sac.profile.v1
+name: generic_web
+description: General-purpose web research — docs, articles, repos; quality-first shortlist.
+output_schema: search_as_code.v1
+quality_first: true
+
+allowlist:
+  - github.com
+  - docs.
+  - readthedocs.io
+  - wikipedia.org
+  - arxiv.org
+  - stackoverflow.com
+  - medium.com
+  - dev.to
+  - npmjs.com
+  - pypi.org
+
+trusted_hosts: []
+
+jsonld_types:
+  - Article
+  - TechArticle
+  - WebPage
+
+discovery:
+  site_queries:
+    github: 'site:github.com README "getting started" {topic}'
+    docs: 'site:readthedocs.io OR site:docs.* {topic}'
+  role_queries:
+    - '{topic} official documentation'
+    - '{topic} tutorial guide'
+    - '{topic} best practices'
+  seed_pages: []
+  duckduckgo_role_query_limit: 6
+  seed_link_keywords:
+    - doc
+    - guide
+    - tutorial
+    - readme
+    - blog
+    - article
+  seed_content_keywords: []
+
+patterns:
+  positive:
+    relevance: '\b(guide|tutorial|documentation|reference|overview|introduction|how to)\b'
+    authority: '\b(official|docs|github|arxiv|peer-reviewed)\b'
+  hard_reject:
+    spam: '\b(casino|crypto airdrop|buy followers|registration fee)\b'
+    thin: '\b(lorem ipsum|under construction)\b'
+
+target_title_regex: ""
+
+scoring:
+  min_shortlist_score: 7.5
+  min_positive_signals: 1
+  max_output: 12
+  actions:
+    - { min: 8.5, label: "Read first" }
+    - { min: 7.5, label: "Skim" }
+    - { min: 0.0, label: "Skip" }

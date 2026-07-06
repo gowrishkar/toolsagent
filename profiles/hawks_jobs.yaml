@@ -1,0 +1,89 @@
+schema: sac.profile.v1
+name: hawks_jobs
+description: AI/product bridge roles for India-remote job scouting (Hawks agent).
+output_schema: search_as_code.v1
+
+allowlist:
+  - wellfound.com
+  - linkedin.com/jobs
+  - aijobs.ai
+  - aijobs.net
+  - naukri.com
+  - hirist.tech
+  - ycombinator.com/jobs
+  - builtin.com
+  - theproductfolks.com/jobs
+  - otta.com
+  - remoteok.com
+  - startup.jobs
+  - levels.fyi/jobs
+
+trusted_hosts:
+  - greenhouse.io
+  - lever.co
+  - ashbyhq.com
+  - myworkdayjobs.com
+  - workdayjobs.com
+  - smartrecruiters.com
+  - workable.com
+
+jsonld_types:
+  - JobPosting
+
+discovery:
+  use_remoteok_api: true
+  remoteok_keywords:
+    - ai
+    - product
+    - solutions
+    - program
+  site_queries:
+    wellfound: 'site:wellfound.com/jobs (AI Product Manager OR GenAI) remote India'
+    linkedin: 'site:linkedin.com/jobs (AI Product Manager OR AI Solutions Consultant) India remote'
+    aijobs: 'site:aijobs.ai (AI Product Manager OR AI Solutions OR GenAI)'
+  role_queries:
+    - '"AI Product Manager" remote India'
+    - '"GenAI Product Manager" India remote'
+    - '"AI Solutions Consultant" India remote'
+    - '"AI Program Manager" India remote'
+  seed_pages:
+    - https://aijobs.ai/jobs
+    - https://www.ycombinator.com/jobs
+    - https://www.hirist.tech/search/ai-product-manager-jobs
+  duckduckgo_role_query_limit: 8
+  seed_link_keywords:
+    - job
+    - career
+    - opening
+    - apply
+  seed_content_keywords:
+    - ai
+    - genai
+    - product
+    - solutions
+
+patterns:
+  positive:
+    ai_core: '\b(ai|genai|llm|agentic|machine learning)\b'
+    ownership: '\b(product|solutions|implementation|program|operations|consultant)\b'
+    location: '\b(india|remote|apac|chennai|bangalore|hybrid)\b'
+  hard_reject:
+    pure_sales: '\b(sdr|bdr|account executive|cold call|quota)\b'
+    deep_engineering: '\b(ml engineer|data scientist|kubernetes.*terraform)\b'
+    junior: '\b(intern|fresher|entry level|0-2 years)\b'
+    scam: '\b(whatsapp only|registration fee|commission only)\b'
+
+target_title_regex: '\b(ai product|genai|solutions consultant|program manager|customer engineer|founder.?s office)\b'
+
+scoring:
+  min_shortlist_score: 8.0
+  min_positive_signals: 2
+  max_output: 10
+  signal_weights:
+    ai_core: 0.5
+    ownership: 0.3
+  actions:
+    - { min: 8.7, label: "Apply now" }
+    - { min: 8.0, label: "Customize CV first" }
+    - { min: 7.0, label: "Monitor" }
+    - { min: 0.0, label: "Reject" }
