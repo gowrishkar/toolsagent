@@ -7,6 +7,7 @@ One repo for how autonomous agents **behave** and **find** things.
 | **How to behave** | `how_to_behave/` | Submind — completion contracts, anti–fake-done, subconscious habits |
 | **What to find** | `what_to_find/search_as_code/` | Search as Code — YAML profiles, discover → validate → rank → JSON |
 | **DREAM (nightly)** | `Dream/` | Diary audit, reflect, `hermes update`, backup, Drive upload (scripts only) |
+| **ANT Loop (coding)** | `skills/ant-loop/` | Autonomous /spec → /build → /review → Merge loop (see below) |
 
 Designed for **Hermes Agent** (and any Python agent loop).
 
@@ -52,6 +53,31 @@ cd ~/toolsagent
 pip install -r requirements.txt pytest
 PYTHONPATH=how_to_behave:what_to_find pytest -q
 ```
+
+## ANT Loop (autonomous coding)
+
+`skills/ant-loop/` is the orchestration layer: a self-driving coding loop where
+the **only human steps** are `/spec` (describe a feature) and 🚀 approve.
+
+```
+/spec ──▶ /build ⇄ /review ──▶ Merge (🚀)
+          └───────────┘  (review loops back to build on blocking issues)
+```
+
+- **`/spec`** — writes a tracked issue (spec, acceptance, edge cases, tech).
+- **`/build`** — cron `build-monitor` polls `spec-ready` issues, spawns a
+  `delegate_task` subagent to implement (follows `backend-developer` playbook).
+- **`/review`** — cron `review-monitor` tests, opens a PR, deploys a preview,
+  notifies; waits for 🚀 before merging.
+- **Board** — GitHub Issues (default) or a local Markdown file
+  (`board.example.md` ships as the template).
+- **Daily improvement** — a cron patches `ant-loop` + `backend-developer`
+  with lessons from the day's runs.
+
+**Dependencies:** the loop delegates to two sibling skills —
+`backend-developer` (build rails) and `code-review-and-quality` (review gate).
+Both are loaded alongside `ant-loop`; see `skills/ant-loop/SKILL.md` for the
+reuse note. The branded flow diagram is `skills/ant-loop/references/loop.jpg`.
 
 ## License
 
