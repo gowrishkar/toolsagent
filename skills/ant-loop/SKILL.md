@@ -75,17 +75,19 @@ Every feature flows through three modes. The **only human steps** are: give an i
 
 ---
 
-## Dependencies (note for public reuse)
+## Dependencies (now bundled — stands alone)
 
 This skill is the **orchestration layer** of the ANT Loop. The two workers it
-delegates to live as separate skills and are loaded alongside it:
+delegates to now ship in this repo alongside it, so the loop is self-contained:
 
-- **`backend-developer`** — the build playbook `/build` follows (architecture,
-  style, testing conventions). Load with `skill_view backend-developer`.
-- **`code-review-and-quality`** — the review gate `/review` runs (security,
-  performance, bugs, best practices). Load with `skill_view code-review-and-quality`.
+- **`backend-developer`** (`skills/backend-developer/`) — the build playbook
+  `/build` follows (architecture, style, testing conventions).
+  Load with `skill_view backend-developer`.
+- **`code-review-and-quality`** (`skills/code-review-and-quality/`) — the review
+  gate `/review` runs (security, performance, bugs, best practices).
+  Load with `skill_view code-review-and-quality`.
 
-If either is absent, the loop still drives (cron polling + `delegate_task`), but
-`/build` loses its engineering rails and `/review` loses its multi-axis gate —
-wire both in for the full self-driving loop. A ready-made `board.example.md`
-(template for the local Markdown tracker) ships in this folder.
+A ready-made `board.example.md` (template for the local Markdown tracker) also
+ships in this folder. Load all three skills together for the full self-driving
+loop: `skill_view ant-loop`, then `skill_view backend-developer`, then
+`skill_view code-review-and-quality`.

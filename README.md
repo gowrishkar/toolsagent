@@ -7,7 +7,9 @@ One repo for how autonomous agents **behave** and **find** things.
 | **How to behave** | `how_to_behave/` | Submind — completion contracts, anti–fake-done, subconscious habits |
 | **What to find** | `what_to_find/search_as_code/` | Search as Code — YAML profiles, discover → validate → rank → JSON |
 | **DREAM (nightly)** | `Dream/` | Diary audit, reflect, `hermes update`, backup, Drive upload (scripts only) |
-| **ANT Loop (coding)** | `skills/ant-loop/` | Autonomous /spec → /build → /review → Merge loop (see below) |
+| **ANT Loop (coding)** | `skills/ant-loop/` | Autonomous /spec → /build → /review → Merge loop (self-contained: bundles `backend-developer` + `code-review-and-quality`) |
+| **Backend playbook** | `skills/backend-developer/` | `/build` rails — REST, auth, SQL/NoSQL, caching, deploy |
+| **Code review gate** | `skills/code-review-and-quality/` | `/review` multi-axis gate — correctness, security, perf, readability |
 
 Designed for **Hermes Agent** (and any Python agent loop).
 
@@ -74,10 +76,11 @@ the **only human steps** are `/spec` (describe a feature) and 🚀 approve.
 - **Daily improvement** — a cron patches `ant-loop` + `backend-developer`
   with lessons from the day's runs.
 
-**Dependencies:** the loop delegates to two sibling skills —
-`backend-developer` (build rails) and `code-review-and-quality` (review gate).
-Both are loaded alongside `ant-loop`; see `skills/ant-loop/SKILL.md` for the
-reuse note. The branded flow diagram is `skills/ant-loop/references/loop.jpg`.
+**Dependencies (bundled):** the loop delegates to two sibling skills that
+**ship in this repo** — `backend-developer` (build rails) and
+`code-review-and-quality` (review gate). Load all three together:
+`skill_view ant-loop`, `skill_view backend-developer`, `skill_view code-review-and-quality`.
+The branded flow diagram is `skills/ant-loop/references/loop.jpg`.
 
 ## License
 
